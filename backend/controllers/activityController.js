@@ -1,5 +1,6 @@
 const SleepLog = require('../models/SleepLog');
 const PlayLog = require('../models/PlayLog');
+const CryLog = require('../models/CryLog');
 const Child = require('../models/Child');
 
 // ========== SLEEP CONTROLLERS ==========
@@ -346,7 +347,7 @@ exports.getActivityTimeline = async (req, res, next) => {
     console.log('Timeline query for child:', childId);
     console.log('Date range:', queryDate, 'to', nextDay);
 
-    const [foodLogs, diaperLogs, sleepLogs, playLogs] = await Promise.all([
+    const [foodLogs, diaperLogs, sleepLogs, playLogs, cryLogs] = await Promise.all([
       FoodLog.find({
         child: childId,
         timeGiven: { $gte: queryDate, $lt: nextDay }
@@ -362,6 +363,10 @@ exports.getActivityTimeline = async (req, res, next) => {
       PlayLog.find({
         child: childId,
         startTime: { $gte: queryDate, $lt: nextDay }
+      }).populate('caretaker', 'name').lean(),
+      CryLog.find({
+        child: childId,
+        startTime: { $gte: queryDate, $lt: nextDay }
       }).populate('caretaker', 'name').lean()
     ]);
 
@@ -369,7 +374,8 @@ exports.getActivityTimeline = async (req, res, next) => {
       food: foodLogs.length,
       diaper: diaperLogs.length,
       sleep: sleepLogs.length,
-      play: playLogs.length
+      play: playLogs.length,
+      cry: cryLogs.length
     });
 
     // Combine and format all activities
@@ -423,6 +429,21 @@ exports.getActivityTimeline = async (req, res, next) => {
           startTime: log.startTime,
           endTime: log.endTime,
           duration: log.duration,
+          isActive: log.isActive,
+          notes: log.notes
+        }
+      })),
+      ...cryLogs.map(log => ({
+        _id: log._id,
+        type: 'cry',
+        timestamp: log.startTime,
+        caretaker: log.caretaker,
+        details: {
+          startTime: log.startTime,
+          endTime: log.endTime,
+          duration: log.duration,
+          intensity: log.intensity,
+          reason: log.reason,
           isActive: log.isActive,
           notes: log.notes
         }
@@ -502,6 +523,206 @@ exports.deletePlayLog = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: 'Play log deleted successfully',
+      data: {}
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ========== CRY CONTROLLERS ==========
+
+// @desc    Start cry session
+// @route   POST /api/activities/cry/start
+// @access  Private (Caretaker, Admin)
+exports.startCry = async (req, res, next) => {
+  try {
+    const { childId, startTime, notes } = req.body;
+
+    const child = await Child.findById(childId);
+    if (!child) {
+      return res.status(404).json({
+        success: false,
+        message: 'Child not found'
+      });
+    }
+
+    // Check if there's an active cry session
+    const activeCry = await CryLog.findOne({ child: childId, isActive: true });
+    if (activeCry) {
+      return res.status(400).json({
+        success: false,
+        message: 'Child already has an active cry session'
+      });
+    }
+
+    const cryLog = await CryLog.create({
+      child: childId,
+      caretaker: req.user.id,
+      startTime: startTime || Date.now(),
+      notes,
+      isActive: true
+    });
+
+    const populatedLog = await CryLog.findById(cryLog._id)
+      .populate('child', 'name childId')
+      .populate('caretaker', 'name');
+
+    res.status(201).json({
+      success: true,
+      message: `😢 Cry session started for ${child.name}`,
+      data: populatedLog
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    End cry session
+// @route   PUT /api/activities/cry/end/:id
+// @access  Private (Caretaker, Admin)
+exports.endCry = async (req, res, next) => {
+  try {
+    const { intensity, reason, endTime, notes } = req.body;
+
+    const cryLog = await CryLog.findById(req.params.id);
+    if (!cryLog) {
+      return res.status(404).json({
+        success: false,
+        message: 'Cry log not found'
+      });
+    }
+
+    const actualEndTime = endTime ? new Date(endTime) : new Date();
+    const duration = Math.floor((actualEndTime - new Date(cryLog.startTime)) / (1000 * 60)); // minutes
+
+    cryLog.endTime = actualEndTime;
+    cryLog.duration = duration;
+    cryLog.intensity = intensity || cryLog.intensity;
+    cryLog.reason = reason || cryLog.reason;
+    cryLog.notes = notes || cryLog.notes;
+    cryLog.isActive = false;
+
+    await cryLog.save();
+
+    const populatedLog = await CryLog.findById(cryLog._id)
+      .populate('child', 'name childId')
+      .populate('caretaker', 'name');
+
+    res.status(200).json({
+      success: true,
+      message: `😢 Cry session ended. Duration: ${duration} minutes`,
+      data: populatedLog
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get cry logs for a child
+// @route   GET /api/activities/cry/child/:childId
+// @access  Private
+exports.getCryLogsByChild = async (req, res, next) => {
+  try {
+    const { childId } = req.params;
+    const { startDate, endDate } = req.query;
+
+    const query = { child: childId };
+
+    if (startDate || endDate) {
+      query.startTime = {};
+      if (startDate) query.startTime.$gte = new Date(startDate);
+      if (endDate) query.startTime.$lte = new Date(endDate);
+    }
+
+    const cryLogs = await CryLog.find(query)
+      .populate('child', 'name childId')
+      .populate('caretaker', 'name')
+      .sort({ startTime: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: cryLogs.length,
+      data: cryLogs
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get cry summary for a child
+// @route   GET /api/activities/cry/summary/:childId
+// @access  Private
+exports.getCrySummary = async (req, res, next) => {
+  try {
+    const { childId } = req.params;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const cryLogs = await CryLog.find({
+      child: childId,
+      startTime: { $gte: today },
+      isActive: false
+    }).sort({ startTime: -1 });
+
+    const activeCry = await CryLog.findOne({ child: childId, isActive: true });
+
+    let totalDuration = 0;
+    cryLogs.forEach(log => {
+      totalDuration += log.duration || 0;
+    });
+
+    let currentCryDuration = 0;
+    if (activeCry) {
+      currentCryDuration = Math.floor((new Date() - new Date(activeCry.startTime)) / (1000 * 60));
+    }
+
+    const summary = {
+      todayCount: cryLogs.length,
+      totalCryToday: totalDuration, // minutes
+      averageDuration: cryLogs.length > 0 ? Math.floor(totalDuration / cryLogs.length) : 0,
+      isCurrentlyCrying: !!activeCry,
+      currentCryDuration,
+      activeCry: activeCry || null,
+      lastCry: cryLogs[0] || null
+    };
+
+    res.status(200).json({
+      success: true,
+      data: summary
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Delete cry log
+// @route   DELETE /api/activities/cry/:id
+// @access  Private (Caretaker/Admin - can delete own logs or admin can delete any)
+exports.deleteCryLog = async (req, res, next) => {
+  try {
+    const cryLog = await CryLog.findById(req.params.id);
+
+    if (!cryLog) {
+      return res.status(404).json({
+        success: false,
+        message: 'Cry log not found'
+      });
+    }
+
+    // Allow caretaker to delete own log or admin to delete any
+    if (cryLog.caretaker.toString() !== req.user.id && req.user.role !== 'admin') {
+      return res.status(403).json({
+        success: false,
+        message: 'Not authorized to delete this log'
+      });
+    }
+
+    await cryLog.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: 'Cry log deleted successfully',
       data: {}
     });
   } catch (error) {

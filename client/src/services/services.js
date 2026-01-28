@@ -209,6 +209,28 @@ export const activityService = {
     return response.data;
   },
 
+  // Cry
+  startCry: async (cryData) => {
+    const response = await api.post('/activities/cry/start', cryData);
+    return response.data;
+  },
+  endCry: async (id, data) => {
+    const response = await api.put(`/activities/cry/end/${id}`, data);
+    return response.data;
+  },
+  getCryLogs: async (childId, params = {}) => {
+    const response = await api.get(`/activities/cry/child/${childId}`, { params });
+    return response.data;
+  },
+  getCrySummary: async (childId) => {
+    const response = await api.get(`/activities/cry/summary/${childId}`);
+    return response.data;
+  },
+  deleteCry: async (id) => {
+    const response = await api.delete(`/activities/cry/${id}`);
+    return response.data;
+  },
+
   // Timeline
   getTimeline: async (childId, date = null) => {
     const params = date ? { date } : {};

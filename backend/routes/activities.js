@@ -25,9 +25,14 @@ const {
   endPlay,
   getPlayLogsByChild,
   getPlaySummary,
+  startCry,
+  endCry,
+  getCryLogsByChild,
+  getCrySummary,
   getActivityTimeline,
   deleteSleepLog,
-  deletePlayLog
+  deletePlayLog,
+  deleteCryLog
 } = require('../controllers/activityController');
 
 const { protect, authorize } = require('../middleware/auth');
@@ -62,6 +67,13 @@ router.put('/play/end/:id', protect, authorize('caretaker', 'admin'), endPlay);
 router.get('/play/child/:childId', protect, getPlayLogsByChild);
 router.get('/play/summary/:childId', protect, getPlaySummary);
 router.delete('/play/:id', protect, authorize('caretaker', 'admin'), deletePlayLog);
+
+// Cry routes
+router.post('/cry/start', protect, authorize('caretaker', 'admin'), startCry);
+router.put('/cry/end/:id', protect, authorize('caretaker', 'admin'), endCry);
+router.get('/cry/child/:childId', protect, getCryLogsByChild);
+router.get('/cry/summary/:childId', protect, getCrySummary);
+router.delete('/cry/:id', protect, authorize('caretaker', 'admin'), deleteCryLog);
 
 // Unified timeline
 router.get('/timeline/:childId', protect, getActivityTimeline);

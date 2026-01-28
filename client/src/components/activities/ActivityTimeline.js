@@ -64,6 +64,9 @@ const ActivityTimeline = ({ childId }) => {
         case 'play':
           await activityService.deletePlay(activityId);
           break;
+        case 'cry':
+          await activityService.deleteCry(activityId);
+          break;
         default:
           throw new Error('Unknown activity type');
       }
@@ -84,7 +87,8 @@ const ActivityTimeline = ({ childId }) => {
       food: '🍲',
       diaper: '🧷',
       sleep: '😴',
-      play: '🎈'
+      play: '🎈',
+      cry: '😢'
     };
     return icons[type] || '📝';
   };
@@ -296,6 +300,79 @@ const ActivityTimeline = ({ childId }) => {
             {isActivePlay && (
               <div className="activity-alert info">
                 🎯 Currently playing...
+              </div>
+            )}
+          </>
+        );
+      case 'cry':
+        const cryStartTime = activity.details.startTime || activity.timestamp;
+        const cryEndTime = activity.details.endTime;
+        const cryDuration = activity.details.duration;
+        const isActiveCry = activity.details.isActive === true;
+        const currentCryDuration = isActiveCry 
+          ? formatDuration(Math.floor((new Date() - new Date(cryStartTime)) / 60000))
+          : formatDuration(cryDuration || 0);
+        const intensityEmoji = {
+          'Mild': '😢',
+          'Moderate': '😭',
+          'Severe': '😫'
+        }[activity.details.intensity] || '😢';
+        const reasonEmoji = {
+          'Hungry': '🍼',
+          'Diaper': '🧷',
+          'Tired': '😴',
+          'Pain': '🤕',
+          'Attention': '👋'
+        }[activity.details.reason] || '❓';
+        
+        return (
+          <>
+            <div className="timeline-title-compact">
+              <span className="activity-icon-badge">😢</span>
+              <span className="activity-main-text">
+                Cry Session {isActiveCry ? 'Started' : 'Ended'}
+                <span className="duration-badge">
+                  ⏱️ {currentCryDuration}{isActiveCry ? ' (ongoing)' : ''}
+                </span>
+              </span>
+              <span className={`activity-badge-mini ${isActiveCry ? 'ongoing' : 'completed'}`}>
+                {isActiveCry ? '🔄' : '✓'}
+              </span>
+            </div>
+            <div className="activity-meta">
+              <span className="meta-item">
+                😢 Cry Start: <strong>{formatFullDateTime(cryStartTime)}</strong>
+              </span>
+              {!isActiveCry && cryEndTime && (
+                <span className="meta-item">
+                  ✅ Cry End: <strong>{formatFullDateTime(cryEndTime)}</strong>
+                </span>
+              )}
+              {!isActiveCry && cryDuration && (
+                <span className="meta-item">
+                  ⏱️ Duration: <strong>{currentCryDuration}</strong>
+                </span>
+              )}
+              {activity.details.intensity && (
+                <span className="meta-item">
+                  {intensityEmoji} Intensity: {activity.details.intensity}
+                </span>
+              )}
+              {activity.details.reason && (
+                <span className="meta-item">
+                  {reasonEmoji} Reason: {activity.details.reason}
+                </span>
+              )}
+            </div>
+            {activity.details.notes && (
+              <div className="activity-notes">
+                <span className="notes-icon">📝</span>
+                {activity.details.notes}
+              </div>
+            )}
+            {isActiveCry && (
+              <div className="activity-alert info" style={{ background: '#ffebee' }}>
+                😢 Currently crying...
               </div>
             )}
           </>

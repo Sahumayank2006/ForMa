@@ -20,7 +20,7 @@ Every time a child is fed - what they ate, how much, and when.
 {
   child: ObjectId,              // Which child was fed (ref: Child)
   caretaker: ObjectId,          // Who fed the child (ref: User)
-  foodType: String,             // "Milk", "Formula", "Solid Food", "Water", "Fruit", "Juice", "Snack", "Other"
+  foodType: String,             // "Milk", "Formula", "Solid Food", "Water"ch, "Fruit", "Juice", "Snack", "Other"
   quantity: String,             // "150", "2", "half bowl"
   unit: String,                 // "ml", "grams", "pieces", "bowl", "cup"
   timeGiven: Date,              // When food was given (default: Date.now)

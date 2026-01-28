@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import FoodForm from '../activities/FoodForm';
 import DiaperPanel from '../activities/DiaperPanel';
+import CryPanel from '../activities/CryPanel';
 import SleepForm from '../activities/SleepForm';
 import PlayForm from '../activities/PlayForm';
+import CryForm from '../activities/CryForm';
 import ActivityTimeline from '../activities/ActivityTimeline';
 import { activityService } from '../../services/services';
 import { getDisplayName, formatMinutes, getDiaperAlertLevel, extractApiData } from '../../utils/helpers';
@@ -17,17 +19,19 @@ const CaretakerDashboard = ({ children, fetchChildren }) => {
     const summaries = {};
     for (const child of children) {
       try {
-        const [food, diaper, sleep, play] = await Promise.all([
+        const [food, diaper, sleep, play, cry] = await Promise.all([
           activityService.getFoodSummary(child._id).catch(() => null),
           activityService.getDiaperSummary(child._id).catch(() => null),
           activityService.getSleepSummary(child._id).catch(() => null),
-          activityService.getPlaySummary(child._id).catch(() => null)
+          activityService.getPlaySummary(child._id).catch(() => null),
+          activityService.getCrySummary(child._id).catch(() => null)
         ]);
         summaries[child._id] = { 
           food: extractApiData(food), 
           diaper: extractApiData(diaper), 
           sleep: extractApiData(sleep), 
-          play: extractApiData(play) 
+          play: extractApiData(play),
+          cry: extractApiData(cry)
         };
       } catch (err) {
         console.error(`Failed to load summaries for ${child.name}`);
@@ -165,11 +169,21 @@ const CaretakerDashboard = ({ children, fetchChildren }) => {
                           <strong>🎈 Playing now</strong> ({formatMinutes(summary.play.currentPlayDuration)})
                         </div>
                       )}
+                      {summary.cry?.isCurrentlyCrying && (
+                        <div style={{ color: '#d32f2f' }}>
+                          <strong>😢 Crying now</strong> ({formatMinutes(summary.cry.currentCryDuration)})
+                        </div>
+                      )}
                     </div>
                   ) : null}
 
                   {/* Enhanced Diaper Panel */}
                   <DiaperPanel child={child} onSuccess={loadAllSummaries} />
+
+                  {/* Cry Panel */}
+                  <div style={{ marginTop: '1rem' }}>
+                    <CryPanel child={child} onSuccess={loadAllSummaries} />
+                  </div>
 
                   {/* Activity Buttons */}
                   <div className="activity-buttons">
@@ -195,6 +209,14 @@ const CaretakerDashboard = ({ children, fetchChildren }) => {
                     >
                       <span className="icon">🎈</span>
                       <span>{summary.play?.isCurrentlyPlaying ? 'End Play' : 'Start Play'}</span>
+                    </button>
+                    <button 
+                      className="activity-btn"
+                      onClick={() => openActivityForm(child, 'cry')}
+                      style={summary.cry?.isCurrentlyCrying ? { borderColor: '#d32f2f', background: '#ffebee' } : {}}
+                    >
+                      <span className="icon">😢</span>
+                      <span>{summary.cry?.isCurrentlyCrying ? 'End Cry' : 'Log Cry'}</span>
                     </button>
                   </div>
 
@@ -229,6 +251,14 @@ const CaretakerDashboard = ({ children, fetchChildren }) => {
                 childId={selectedChild._id} 
                 childName={selectedChild.name} 
                 activePlay={childSummaries[selectedChild._id]?.play?.activePlay}
+                onClose={closeModal} 
+              />
+            )}
+            {activeForm === 'cry' && (
+              <CryForm 
+                childId={selectedChild._id} 
+                childName={selectedChild.name} 
+                activeCry={childSummaries[selectedChild._id]?.cry?.activeCry}
                 onClose={closeModal} 
               />
             )}

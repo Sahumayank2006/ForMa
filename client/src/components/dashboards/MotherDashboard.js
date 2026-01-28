@@ -26,17 +26,19 @@ const MotherDashboard = ({ children, fetchChildren }) => {
     const summaries = {};
     for (const child of children) {
       try {
-        const [food, diaper, sleep, play] = await Promise.all([
+        const [food, diaper, sleep, play, cry] = await Promise.all([
           activityService.getFoodSummary(child._id).catch(() => null),
           activityService.getDiaperSummary(child._id).catch(() => null),
           activityService.getSleepSummary(child._id).catch(() => null),
-          activityService.getPlaySummary(child._id).catch(() => null)
+          activityService.getPlaySummary(child._id).catch(() => null),
+          activityService.getCrySummary(child._id).catch(() => null)
         ]);
         summaries[child._id] = { 
           food: extractApiData(food), 
           diaper: extractApiData(diaper), 
           sleep: extractApiData(sleep), 
-          play: extractApiData(play) 
+          play: extractApiData(play),
+          cry: extractApiData(cry)
         };
       } catch (err) {
         console.error(`Failed to load summaries for ${child.name}`);
@@ -240,6 +242,19 @@ const MotherDashboard = ({ children, fetchChildren }) => {
                           {summary.play.isCurrentlyPlaying 
                             ? formatMinutes(summary.play.currentPlayDuration)
                             : formatMinutes(summary.play.totalPlayToday)}
+                        </div>
+                      </div>
+                    )}
+                    {summary.cry && (
+                      <div className="summary-card" style={{ background: 'linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%)' }}>
+                        <div className="icon">😢</div>
+                        <div className="label">
+                          {summary.cry.isCurrentlyCrying ? 'Crying Now' : 'Total Cry Today'}
+                        </div>
+                        <div className="value">
+                          {summary.cry.isCurrentlyCrying 
+                            ? formatMinutes(summary.cry.currentCryDuration)
+                            : formatMinutes(summary.cry.totalCryToday)}
                         </div>
                       </div>
                     )}
