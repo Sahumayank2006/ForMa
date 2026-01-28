@@ -1,0 +1,196 @@
+/* 
+ * ForMa Baby Care - Theme Variables
+ * Custom CSS Properties for consistent theming
+ * Add this to your root CSS file for easier theme management
+ */
+
+:root {
+  /* Primary Colors - Warm Coral & Rose */
+  --color-primary: #ff8a80;
+  --color-primary-dark: #ff6b81;
+  --color-primary-darker: #e85a7c;
+  --color-primary-darkest: #d63447;
+  --color-primary-light: #ffb8b8;
+  --color-primary-lighter: #ffe0e0;
+  
+  /* Secondary Colors - Lavender & Purple */
+  --color-secondary: #e8a8ff;
+  --color-secondary-dark: #c77dff;
+  --color-secondary-darker: #b067e0;
+  --color-secondary-light: #f5d9ff;
+  
+  /* Background Colors */
+  --bg-primary: #fff5f5;
+  --bg-secondary: #ffe8e8;
+  --bg-tertiary: #fff0f5;
+  --bg-card: #ffffff;
+  --bg-input: #fff8f8;
+  
+  /* Text Colors */
+  --text-primary: #2c3e50;
+  --text-secondary: #95677f;
+  --text-muted: #b08ca0;
+  --text-light: #d4c4cc;
+  --text-white: #ffffff;
+  
+  /* Success Colors */
+  --color-success: #81c784;
+  --color-success-dark: #66bb6a;
+  --color-success-light: #e8f5e9;
+  
+  /* Warning Colors */
+  --color-warning: #ffc478;
+  --color-warning-dark: #ffaa5c;
+  --color-warning-light: #fff3e0;
+  
+  /* Info Colors */
+  --color-info: #64b5f6;
+  --color-info-dark: #42a5f5;
+  --color-info-light: #e3f2fd;
+  
+  /* Neutral Colors */
+  --color-neutral: #a1887f;
+  --color-neutral-light: #efebe9;
+  
+  /* Border Colors */
+  --border-light: rgba(255, 138, 128, 0.12);
+  --border-medium: rgba(255, 138, 128, 0.2);
+  --border-heavy: rgba(255, 138, 128, 0.3);
+  
+  /* Shadow Values */
+  --shadow-sm: 0 4px 12px rgba(255, 107, 129, 0.08);
+  --shadow-md: 0 10px 40px rgba(255, 107, 129, 0.15);
+  --shadow-lg: 0 15px 50px rgba(255, 107, 129, 0.25);
+  --shadow-xl: 0 25px 80px rgba(255, 107, 129, 0.3);
+  
+  /* Shadow Values - Interactive */
+  --shadow-button: 0 6px 20px rgba(255, 107, 129, 0.35);
+  --shadow-button-hover: 0 10px 35px rgba(255, 107, 129, 0.45);
+  
+  /* Border Radius */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 28px;
+  --radius-pill: 30px;
+  --radius-full: 50%;
+  
+  /* Spacing Scale (8px base) */
+  --space-xs: 0.5rem;   /* 8px */
+  --space-sm: 1rem;     /* 16px */
+  --space-md: 1.5rem;   /* 24px */
+  --space-lg: 2rem;     /* 32px */
+  --space-xl: 2.5rem;   /* 40px */
+  --space-2xl: 3rem;    /* 48px */
+  --space-3xl: 4rem;    /* 64px */
+  
+  /* Typography */
+  --font-primary: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
+  /* Font Sizes */
+  --text-xs: 0.75rem;   /* 12px */
+  --text-sm: 0.875rem;  /* 14px */
+  --text-base: 1rem;    /* 16px */
+  --text-lg: 1.125rem;  /* 18px */
+  --text-xl: 1.25rem;   /* 20px */
+  --text-2xl: 1.5rem;   /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+  --text-4xl: 2.25rem;  /* 36px */
+  --text-5xl: 3rem;     /* 48px */
+  
+  /* Font Weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+  
+  /* Line Heights */
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+  
+  /* Letter Spacing */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+  
+  /* Z-Index Scale */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal: 1000;
+  --z-toast: 9999;
+  --z-tooltip: 10000;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  --gradient-primary-extended: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 50%, var(--color-secondary) 100%);
+  --gradient-success: linear-gradient(135deg, var(--color-success) 0%, var(--color-success-dark) 100%);
+  --gradient-warning: linear-gradient(135deg, var(--color-warning) 0%, var(--color-warning-dark) 100%);
+  --gradient-text: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary-darker) 100%);
+  
+  /* Backdrop Blur */
+  --blur-sm: blur(8px);
+  --blur-md: blur(12px);
+  --blur-lg: blur(16px);
+}
+
+/* Dark Mode Support (Optional - for future implementation) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-card: #242424;
+    --text-primary: #ffffff;
+    --text-secondary: #d4c4cc;
+  }
+}
+
+/* Usage Examples:
+
+.button-primary {
+  background: var(--gradient-primary);
+  color: var(--text-white);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-button);
+  transition: all var(--transition-base);
+  font-weight: var(--font-bold);
+}
+
+.button-primary:hover {
+  box-shadow: var(--shadow-button-hover);
+  transform: translateY(-4px);
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border-medium);
+}
+
+.heading {
+  font-family: var(--font-primary);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-extrabold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+*/

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ForMa Baby Care - Theme Color Palette</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 50%, #fff0f5 100%);
+            padding: 3rem;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(255, 107, 129, 0.15);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff6b81 0%, #e85a7c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #95677f;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid rgba(255, 138, 128, 0.2);
+            padding-bottom: 0.5rem;
+        }
+        
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .color-card {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .color-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .color-swatch {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        .color-info {
+            padding: 1rem;
+            background: white;
+        }
+        
+        .color-name {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .color-hex {
+            font-family: monospace;
+            color: #95677f;
+            font-size: 0.9rem;
+        }
+        
+        .gradient-card {
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1rem;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .demo-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .demo-card {
+            background: white;
+            border: 2px solid rgba(255, 138, 128, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(255, 107, 129, 0.12);
+        }
+        
+        .demo-button {
+            background: linear-gradient(135deg, #ff8a80 0%, #ff6b81 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(255, 107, 129, 0.35);
+        }
+        
+        .demo-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 129, 0.45);
+        }
+        
+        .emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 ForMa Baby Care Color Palette</h1>
+        <p class="subtitle">Warm, Nurturing, and Professional Theme for Indian Mothers</p>
+        
+        <!-- Primary Colors -->
+        <div class="section">
+            <h2 class="section-title">Primary Colors - Coral & Rose</h2>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #ff8a80;">🌸</div>
+                    <div class="color-info">
+                        <div class="color-name">Coral Pink</div>
+                        <div class="color-hex">#ff8a80</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #ff6b81;">🌺</div>
+                    <div class="color-info">
+                        <div class="color-name">Rose Pink</div>
+                        <div class="color-hex">#ff6b81</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #e85a7c;">🌷</div>
+                    <div class="color-info">
+                        <div class="color-name">Deep Rose</div>
+                        <div class="color-hex">#e85a7c</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #d63447;">💕</div>
+                    <div class="color-info">
+                        <div class="color-name">Crimson</div>
+                        <div class="color-hex">#d63447</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Secondary Colors -->
+        <div class="section">
+            <h2 class="section-title">Secondary Colors - Lavender</h2>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #e8a8ff;">💜</div>
+                    <div class="color-info">
+                        <div class="color-name">Lavender</div>
+                        <div class="color-hex">#e8a8ff</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #c77dff;">🦋</div>
+                    <div class="color-info">
+                        <div class="color-name">Purple</div>
+                        <div class="color-hex">#c77dff</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Accent Colors -->
+        <div class="section">
+            <h2 class="section-title">Accent Colors</h2>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #81c784;">✅</div>
+                    <div class="color-info">
+                        <div class="color-name">Success Green</div>
+                        <div class="color-hex">#81c784</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #ffc478;">⚠️</div>
+                    <div class="color-info">
+                        <div class="color-name">Warm Orange</div>
+                        <div class="color-hex">#ffc478</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #64b5f6;">ℹ️</div>
+                    <div class="color-info">
+                        <div class="color-name">Info Blue</div>
+                        <div class="color-hex">#64b5f6</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gradients -->
+        <div class="section">
+            <h2 class="section-title">Gradient Examples</h2>
+            <div class="gradient-card" style="background: linear-gradient(135deg, #ff8a80 0%, #ff6b81 100%);">
+                Primary Button Gradient
+            </div>
+            <div class="gradient-card" style="background: linear-gradient(135deg, #ff8a80 0%, #ff6b81 50%, #e8a8ff 100%);">
+                Extended Gradient (Headers & Navbars)
+            </div>
+            <div class="gradient-card" style="background: linear-gradient(135deg, #81c784 0%, #66bb6a 100%);">
+                Success State Gradient
+            </div>
+        </div>
+        
+        <!-- Component Demos -->
+        <div class="section">
+            <h2 class="section-title">Component Examples</h2>
+            <div class="demo-section">
+                <div class="demo-card">
+                    <span class="emoji">👶</span>
+                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">Baby Profile</h3>
+                    <p style="color: #95677f; margin-bottom: 1.5rem;">Track your baby's activities with love and care</p>
+                    <button class="demo-button">View Details</button>
+                </div>
+                <div class="demo-card">
+                    <span class="emoji">🍼</span>
+                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">Feeding Time</h3>
+                    <p style="color: #95677f; margin-bottom: 1.5rem;">Monitor feeding schedules and patterns</p>
+                    <button class="demo-button">Add Feeding</button>
+                </div>
+                <div class="demo-card">
+                    <span class="emoji">😴</span>
+                    <h3 style="margin-bottom: 1rem; color: #2c3e50;">Sleep Tracker</h3>
+                    <p style="color: #95677f; margin-bottom: 1.5rem;">Record sleep times and durations</p>
+                    <button class="demo-button">Log Sleep</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Background Colors -->
+        <div class="section">
+            <h2 class="section-title">Background Colors</h2>
+            <div class="color-grid">
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #fff5f5; color: #2c3e50;">🎀</div>
+                    <div class="color-info">
+                        <div class="color-name">Cream White</div>
+                        <div class="color-hex">#fff5f5</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #ffe8e8; color: #2c3e50;">💗</div>
+                    <div class="color-info">
+                        <div class="color-name">Soft Blush</div>
+                        <div class="color-hex">#ffe8e8</div>
+                    </div>
+                </div>
+                <div class="color-card">
+                    <div class="color-swatch" style="background: #fff0f5; color: #2c3e50;">🌷</div>
+                    <div class="color-info">
+                        <div class="color-name">Light Rose</div>
+                        <div class="color-hex">#fff0f5</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 2px solid rgba(255, 138, 128, 0.2);">
+            <p style="color: #95677f; font-size: 1.1rem;">
+                <strong>ForMa Baby Care</strong> - Designed with Love for Indian Mothers 💕
+            </p>
+        </div>
+    </div>
+</body>
+</html>
