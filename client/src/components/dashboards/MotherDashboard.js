@@ -19,7 +19,7 @@ const MotherDashboard = ({ children, fetchChildren }) => {
       const interval = setInterval(loadAllSummaries, 30000);
       return () => clearInterval(interval);
     }
-  }, [children]);
+  }, [children]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadAllSummaries = async () => {
     setLoading(true);

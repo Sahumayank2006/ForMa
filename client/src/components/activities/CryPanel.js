@@ -8,9 +8,23 @@ const CryPanel = ({ child, onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [duration, setDuration] = useState(0);
 
+  const loadActiveCry = async () => {
+    try {
+      const response = await activityService.getCrySummary(child._id);
+      const summary = extractApiData(response);
+      if (summary?.isCurrentlyCrying && summary?.activeCry) {
+        setActiveCry(summary.activeCry);
+      } else {
+        setActiveCry(null);
+      }
+    } catch (err) {
+      console.error('Failed to load active cry:', err);
+    }
+  };
+
   useEffect(() => {
     loadActiveCry();
-  }, [child._id]);
+  }, [child._id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (activeCry) {
@@ -21,20 +35,6 @@ const CryPanel = ({ child, onSuccess }) => {
       return () => clearInterval(interval);
     }
   }, [activeCry]);
-
-  const loadActiveCry = async () => {
-    try {
-      const response = await activityService.getCrySummary(child._id);
-      const summary = extractApiData(response);
-      if (summary?.isCurrentlyCrying && summary?.activeCry) {
-        setActiveCry(summary.activeCry);
-      } else {
-        setActiveCry(null);
-      }
-    } catch (error) {
-      console.error('Error loading active cry:', error);
-    }
-  };
 
   const handleStartCry = async () => {
     setLoading(true);
