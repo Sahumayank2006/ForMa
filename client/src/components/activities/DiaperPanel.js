@@ -13,13 +13,24 @@ const DiaperPanel = ({ child, onSuccess }) => {
 
     try {
       const token = localStorage.getItem('token');
+      const currentTime = new Date().toISOString();
+      
+      console.log('Submitting diaper data:', {
+        childId: child._id,
+        status,
+        notes,
+        timeChecked: currentTime,
+        timeChanged: currentTime
+      });
+      
       const response = await axios.post(
         'http://localhost:5000/api/activities/diaper',
         {
           childId: child._id,
           status,
           notes,
-          timeChanged: new Date().toISOString()
+          timeChecked: currentTime,
+          timeChanged: currentTime
         },
         {
           headers: {
@@ -27,6 +38,8 @@ const DiaperPanel = ({ child, onSuccess }) => {
           }
         }
       );
+
+      console.log('Response:', response.data);
 
       if (response.data.success) {
         alert(response.data.message || '🧷 Diaper changed successfully!');
@@ -36,6 +49,7 @@ const DiaperPanel = ({ child, onSuccess }) => {
       }
     } catch (error) {
       console.error('Error logging diaper change:', error);
+      console.error('Error response:', error.response);
       alert(error.response?.data?.message || 'Failed to log diaper change');
     } finally {
       setLoading(false);

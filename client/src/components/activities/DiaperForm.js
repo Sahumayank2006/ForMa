@@ -25,15 +25,41 @@ const DiaperForm = ({ childId, childName, onClose }) => {
     setLoading(true);
 
     try {
+      console.log('Submitting diaper data:', {
+        childId,
+        ...formData
+      });
+      
       const response = await activityService.addDiaper({
         childId,
         ...formData
       });
       
+      console.log('Diaper log response:', response);
       alert(response.message);
       onClose();
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to record diaper change');
+      console.error('Diaper log error:', err);
+      console.error('Error response:', err.response);
+      console.error('Error data:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      
+      // Handle different error types
+      let errorMessage = 'Failed to record diaper change';
+      
+      if (err.message && !err.response) {
+        // Network or timeout error
+        errorMessage = err.message;
+      } else if (err.response?.data?.message) {
+        // Server error message
+        errorMessage = err.response.data.message;
+      } else if (err.response?.status === 500) {
+        errorMessage = 'Server error. Please try again later.';
+      } else if (err.response?.status === 403) {
+        errorMessage = 'You do not have permission to log diaper changes.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

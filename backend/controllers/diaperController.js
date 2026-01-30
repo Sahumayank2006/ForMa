@@ -6,36 +6,81 @@ const Child = require('../models/Child');
 // @access  Private (Caretaker, Admin)
 exports.addDiaperLog = async (req, res, next) => {
   try {
+    console.log('=== ADD DIAPER LOG REQUEST ===');
+    console.log('User:', req.user);
+    console.log('Request body:', req.body);
+    
     const { childId, status, timeChecked, timeChanged, notes } = req.body;
+
+    // Validate required fields
+    if (!childId) {
+      console.log('ERROR: Child ID is missing');
+      return res.status(400).json({
+        success: false,
+        message: 'Child ID is required'
+      });
+    }
+
+    if (!status) {
+      console.log('ERROR: Status is missing');
+      return res.status(400).json({
+        success: false,
+        message: 'Diaper status is required'
+      });
+    }
 
     // Verify child exists
     const child = await Child.findById(childId);
     if (!child) {
+      console.log('ERROR: Child not found with ID:', childId);
       return res.status(404).json({
         success: false,
         message: 'Child not found'
       });
     }
 
+    console.log('Child found:', child.name);
+
+    // Parse dates if they're strings (from mobile forms)
+    const parsedTimeChecked = timeChecked ? new Date(timeChecked) : new Date();
+    const parsedTimeChanged = timeChanged ? new Date(timeChanged) : new Date();
+
+    console.log('Creating diaper log with:', {
+      child: childId,
+      caretaker: req.user.id,
+      status,
+      timeChecked: parsedTimeChecked,
+      timeChanged: parsedTimeChanged,
+      notes: notes || ''
+    });
+
     const diaperLog = await DiaperLog.create({
       child: childId,
       caretaker: req.user.id,
       status,
-      timeChecked: timeChecked || Date.now(),
-      timeChanged: timeChanged || Date.now(),
-      notes
+      timeChecked: parsedTimeChecked,
+      timeChanged: parsedTimeChanged,
+      notes: notes || ''
     });
+
+    console.log('Diaper log created successfully:', diaperLog._id);
 
     const populatedLog = await DiaperLog.findById(diaperLog._id)
       .populate('child', 'name childId')
       .populate('caretaker', 'name');
+
+    console.log('Populated log:', populatedLog);
 
     res.status(201).json({
       success: true,
       message: `🧷 Diaper status updated for ${child.name}. Hygiene is on track!`,
       data: populatedLog
     });
+    
+    console.log('Response sent successfully');
   } catch (error) {
+    console.error('Diaper log creation error:', error);
+    console.error('Error stack:', error.stack);
     next(error);
   }
 };
